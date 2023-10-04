@@ -12,15 +12,21 @@ float angle = 0.0;
 float radius = 1.0;
 int numSegments = 100;
 
+bool isDay = true;
+
 void displayMe(void)
 {
-    glClearColor(0.69, 0.93, 0.93, 1);
+    if (isDay){
+        glClearColor(0.69, 0.93, 0.93, 1);
+    }
+    else{
+        glClearColor(0.0, 0.13, 0.22, 1.0); // Черный цвет фона в ночное время
+    }
     glClear(GL_COLOR_BUFFER_BIT);
 
     glColor3f(0.98,0.9,0.08);
     glBegin(GL_POLYGON);
-    for (int i = 0; i < numSegments; i++)
-    {
+    for (int i = 0; i < numSegments; i++){
         float theta = 2.0f * M_PI * float(i) / float(numSegments);
         float x = radiusSun * cosf(theta);
         float y = radiusSun * sinf(theta);
@@ -30,8 +36,7 @@ void displayMe(void)
 
     glColor3f(1.0, 1.0, 0.6);
     glBegin(GL_POLYGON);
-    for (int i = 0; i < numSegments; i++)
-    {
+    for (int i = 0; i < numSegments; i++){
         float theta = 2.0f * M_PI * float(i) / float(numSegments);
         float x = radiusSun * cosf(theta);
         float y = radiusSun * sinf(theta);
@@ -44,8 +49,7 @@ void displayMe(void)
     float radiusField = 2.0;
     float centerXField = 0.0;
     float centerYField = -1.75;
-    for (int i = 0; i < numSegments; i++)
-    {
+    for (int i = 0; i < numSegments; i++){
         float alpha = i * (M_PI / (numSegments - 1));
         float x = centerXField + radiusField * cos(alpha);
         float y = centerYField + radiusField * sin(alpha);
@@ -62,6 +66,14 @@ void update(int value)
     centerYSun = radius * sin(angle);
     centerXMoon = radius * cos(angle + M_PI);
     centerYMoon = radius * sin(angle + M_PI);
+
+    if (centerYSun < 0){
+        isDay = false;
+    }
+    else if (centerYSun > 0){
+        isDay = true;
+    }
+
     glutPostRedisplay();
     glutTimerFunc(16, update, 0);
 }

@@ -7,55 +7,55 @@ bool wireframeMode = false;
 
 void init(void) {
     glClearColor(0.0, 0.0, 0.0, 0.0);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-    glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_DEPTH_TEST);//обновление буфера глубины
+    glEnable(GL_LIGHTING);//включение расчета освещения
+    glEnable(GL_LIGHT0);//разбл ист света
+    glEnable(GL_COLOR_MATERIAL);//влияет на расчет освещения с учетом граней
+    glEnable(GL_TEXTURE_2D);//разрешение наложение текстуры
 }
 
 void drawTransparentCube(float size) {
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);//разр наложение цветов
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//алг смешивания
 
     glBegin(GL_QUADS);
 
-    glColor4f(1.0, 0.0, 0.0, 0.5);//Красный
-    glNormal3f(0.0, 0.0, 1.0);
+    glColor4f(1.0, 0.0, 0.0, 0.5);//красный
+    glNormal3f(0.0, 0.0, 1.0);//уст нормали для создания корректного освещения сцены
     glVertex3f(-size / 2, -size / 2, size / 2);
     glVertex3f(size / 2, -size / 2, size / 2);
     glVertex3f(size / 2, size / 2, size / 2);
     glVertex3f(-size / 2, size / 2, size / 2);
 
-    glColor4f(0.0, 1.0, 0.0, 0.5);//Зеленый
+    glColor4f(0.0, 1.0, 0.0, 0.5);//зеленый
     glNormal3f(0.0, 0.0, -1.0);
     glVertex3f(-size / 2, -size / 2, -size / 2);
     glVertex3f(size / 2, -size / 2, -size / 2);
     glVertex3f(size / 2, size / 2, -size / 2);
     glVertex3f(-size / 2, size / 2, -size / 2);
 
-    glColor4f(0.0, 0.0, 1.0, 0.5);//Синий
+    glColor4f(0.0, 0.0, 1.0, 0.5);//синий
     glNormal3f(0.0, 1.0, 0.0);
     glVertex3f(-size / 2, size / 2, size / 2);
     glVertex3f(size / 2, size / 2, size / 2);
     glVertex3f(size / 2, size / 2, -size / 2);
     glVertex3f(-size / 2, size / 2, -size / 2);
 
-    glColor4f(1.0, 1.0, 0.0, 0.5);//Желтый
+    glColor4f(1.0, 1.0, 0.0, 0.5);//желтый
     glNormal3f(0.0, -1.0, 0.0);
     glVertex3f(-size / 2, -size / 2, size / 2);
     glVertex3f(size / 2, -size / 2, size / 2);
     glVertex3f(size / 2, -size / 2, -size / 2);
     glVertex3f(-size / 2, -size / 2, -size / 2);
 
-    glColor4f(0.0, 1.0, 1.0, 0.5);//Бирюзовый
+    glColor4f(0.0, 1.0, 1.0, 0.5);//бирюзовый
     glNormal3f(-1.0, 0.0, 0.0);
     glVertex3f(-size / 2, -size / 2, size / 2);
     glVertex3f(-size / 2, -size / 2, -size / 2);
     glVertex3f(-size / 2, size / 2, -size / 2);
     glVertex3f(-size / 2, size / 2, size / 2);
 
-    glColor4f(1.0, 0.0, 1.0, 0.5);//Фиолетовый
+    glColor4f(1.0, 0.0, 1.0, 0.5);//фиолетовый
     glNormal3f(1.0, 0.0, 0.0);
     glVertex3f(size / 2, -size / 2, size / 2);
     glVertex3f(size / 2, -size / 2, -size / 2);
@@ -69,13 +69,13 @@ void drawTransparentCube(float size) {
 
 void drawBox() {
     if (wireframeMode) {
-        glEnable(GL_ALPHA_TEST);
+        glEnable(GL_ALPHA_TEST);//разр обработки 4 компонента цвета
         glDepthMask(GL_FALSE);
         drawTransparentCube(boxSize);
         glDepthMask(GL_TRUE);
         glDisable(GL_ALPHA_TEST);
     } else {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);//уст опции для отрисовки многоугольника
         glColor4f(1.0, 1.0, 1.0, 0.5);
         glutSolidCube(boxSize);
     }
@@ -88,8 +88,8 @@ void drawLight() {
 
 void display(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glLoadIdentity();
-    gluLookAt(5.0, 5.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+    glLoadIdentity();//сброс матрицы
+    gluLookAt(5.0, 5.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);//создание матрицы просмотра
     drawBox();
     drawLight();
     glutSwapBuffers();
@@ -97,9 +97,9 @@ void display(void) {
 
 void reshape(int w, int h) {
     glViewport(0, 0, (GLsizei)w, (GLsizei)h);
-    glMatrixMode(GL_PROJECTION);
+    glMatrixMode(GL_PROJECTION);//матрица проецирования 3д в 2д
     glLoadIdentity();
-    gluPerspective(60.0, (GLfloat)w / (GLfloat)h, 1.0, 20.0);
+    gluPerspective(60.0, (GLfloat)w / (GLfloat)h, 1.0, 20.0);//матрица перспективы
     glMatrixMode(GL_MODELVIEW);
 }
 
@@ -131,7 +131,7 @@ int main(int argc, char** argv) {
     glutInitWindowPosition(100, 100);
     glutCreateWindow("lab4");
     init();
-    glutDisplayFunc(display);
+    glutDisplayFunc(display);//вызов отображения тек окна
     glutReshapeFunc(reshape);
     glutTimerFunc(25, timer, 0);
     glutKeyboardFunc(keyboard);

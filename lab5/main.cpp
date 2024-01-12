@@ -20,26 +20,26 @@ GLuint loadTexture(const QString &fileName) {
     }
     QImage texture = image.convertToFormat(QImage::Format_RGBA8888);
     GLuint textureId;
-    glGenTextures(1, &textureId);
-    glBindTexture(GL_TEXTURE_2D, textureId);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture.width(), texture.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.bits());
+    glGenTextures(1, &textureId);//уникальный идентификатор текстуры
+    glBindTexture(GL_TEXTURE_2D, textureId);//все послед операции с текстурой будут прим к текстуре с указанным идентификатором
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture.width(), texture.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.bits());//генерация текстуры
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);//откл тек текстуры
     return textureId;
 }
 
 void initializeGL() {
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-    glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_DEPTH_TEST);//обновление буфера глубины
+    glEnable(GL_LIGHTING);//включение расчета освещения
+    glEnable(GL_LIGHT0);//разбл ист света
+    glEnable(GL_COLOR_MATERIAL);//влияет на расчет освещения с учетом граней
+    glEnable(GL_TEXTURE_2D);//разрешение наложение текстуры
     textures[0] = loadTexture(":/img/1.bmp");
 }
 
 void drawTextureBox() {
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);//уст опции для отрисовки многоугольника
     glBindTexture(GL_TEXTURE_2D, textures[0]);
 
     glBegin(GL_QUADS);
